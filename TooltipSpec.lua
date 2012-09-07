@@ -114,6 +114,7 @@ function TTS:ShowTooltip(guid)
     -- error out
     if not guid then return false end
     if not self.cache[guid] then return false end
+    if not self.cache[guid].talents then return false end
     
     -- /dump TTS.cache[UnitGUID('target')]
     -- /dump TTS.inspect.cache[UnitGUID('target')].data.talents
