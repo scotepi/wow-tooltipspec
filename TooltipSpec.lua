@@ -10,7 +10,8 @@ TTS.events = {}
 TTS.frame = CreateFrame("Frame", "GMIFrame")
 TTS.inspect = LibStub:GetLibrary("LibInspect")
 TTS.nameRole = true;        -- Show the role next to the name
-TTS.showSpec = true;        -- Show the spec on the last line
+TTS.nameSpec = true;        -- Show the spec next to the name
+TTS.showSpec = false;        -- Show the spec on the last line
 TTS.debug = false;
 
 function TTS:OnInitialize()
@@ -106,7 +107,7 @@ end
 
 function TTS:ShowTooltip(guid)
     if not guid then
-        guid = UnitGUID('mouseover');
+        guid = UnitGUID('mouseover')
     end
     
     -- print(guid);
@@ -122,7 +123,7 @@ function TTS:ShowTooltip(guid)
     
     -- print(spec.name)
     
-    local specColor = 'FFFFFF'
+    local specColor = 'B0D2FF'
     local roleIcon = INLINE_DAMAGER_ICON
     
     if spec.role == 'TANK' then
@@ -131,59 +132,75 @@ function TTS:ShowTooltip(guid)
     elseif spec.role == 'HEALER' then
         specColor = 'FFF4B0'
         roleIcon = INLINE_HEALER_ICON
-    elseif spec.role == 'DAMAGER' then
-        specColor = 'B0D2FF';
     end
     
     local _, fontSize = FCF_GetChatWindowInfo(1);
     
-    local textLeft = '|T'..spec.icon..':'..fontSize..'|t';
-    local textRight = '|cFF'..specColor..spec.name..'|r';
-    textLeft = textLeft..' '..textRight;
+    local specIcon = '|T'..spec.icon..':'..fontSize..'|t'
+    local specName = '|cFF'..specColor..spec.name..'|r'
     
+    local textLeft = specIcon..' '..specName
+    local textRight = false -- Nothing Yet
+    
+    -- Put the role on the added line if its not in the name
     if not self:GetNameRole() then
-        textLeft = roleIcon..' '..textLeft;
+        textLeft = roleIcon..' '..textLeft
     end
     
-    local ttLines = GameTooltip:NumLines();
+    local ttLines = GameTooltip:NumLines()
 	local ttUpdated = false;
 	
 	for i = 1,ttLines do
-        -- /run _G["GameTooltipTextLeft1"]:SetText("foo"); GameTooltip:Show();
+        
         -- If the static text matches
 		if _G["GameTooltipTextLeft"..i]:GetText() == textLeft then
             
-            if self:GetNameRole() then
-                _G["GameTooltipTextLeft1"]:SetText(roleIcon..' '.._G["GameTooltipTextLeft1"]:GetText());
-            end
+            self:TooltipAppendName(roleIcon, spec.icon)
             
+            -- Update the text
             if self:GetShowSpec() then
-                -- Update the text
-                _G["GameTooltipTextLeft"..i]:SetText(textLeft);
-                --_G["GameTooltipTextRight"..i]:SetText(textRight);
+                _G["GameTooltipTextLeft"..i]:SetText(textLeft)
+                GameTooltip:Show()
             end
             
-			GameTooltip:Show();
-            ttUpdated = true;
+            ttUpdated = true
         end
     end
     
     if not ttUpdated then
-        
-        if self:GetNameRole() then
-            _G["GameTooltipTextLeft1"]:SetText(roleIcon..' '.._G["GameTooltipTextLeft1"]:GetText());
-        end
+        self:TooltipAppendName(roleIcon, spec.icon)
         
         if self:GetShowSpec() then
-            --GameTooltip:AddDoubleLine(textLeft, textRight);
-            GameTooltip:AddLine(textLeft);
+            GameTooltip:AddLine(textLeft)
+            GameTooltip:Show()
         end
-        
-		GameTooltip:Show();
     end
 end
 
-
+function TTS:TooltipAppendName(roleIcon, specIcon)
+    local currentText = _G["GameTooltipTextLeft1"]:GetText()
+    
+    local appendText = ''
+    
+    -- Add the role
+    if self:GetNameRole() then
+        appendText = appendText..roleIcon..' '
+    end
+    
+    -- Add the spec
+    if self:GetNameSpec() then
+        local fontName, fontHeight, fontFlags = _G["GameTooltipTextLeft1"]:GetFont()
+        appendText = appendText..'|T'..specIcon..':'..fontHeight..'|t '
+    end
+    
+    -- Check that its not alredy there
+    local length = string.len(appendText);
+    if string.sub(currentText, 0, length) == appendText then return true end
+    
+    -- Add the icon
+    _G["GameTooltipTextLeft1"]:SetText(appendText..currentText)
+    GameTooltip:Show()
+end
 
 
 
@@ -192,14 +209,17 @@ end
 --[[ Setters / Getters / Togglers ]]
 function TTS:SetDebug(v) self.debug = v end
 function TTS:SetNameRole(v) self.nameRole = v end
+function TTS:SetNameSpec(v) self.nameSpec = v end
 function TTS:SetShowSpec(v) self.showSpec = v end
 
 function TTS:GetDebug() return self.debug end
 function TTS:GetNameRole() return self.nameRole end
+function TTS:GetNameSpec() return self.nameSpec end
 function TTS:GetShowSpec() return self.showSpec end
 
 function TTS:ToggleDebug() self:SetDebug(not self:GetDebug()) end
 function TTS:ToggleNameRole() self:SetNameRole(not self:GetNameRole()) end
+function TTS:ToggleNameSpec() self:SetNameRole(not self:GetNameSpec()) end
 function TTS:ToggleShowSpec() self:SetShowSpec(not self:GetShowSpec()) end
 
 
