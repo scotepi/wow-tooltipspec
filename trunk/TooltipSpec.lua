@@ -136,6 +136,8 @@ function TTS:ShowTooltip(guid)
     
     local _, fontSize = FCF_GetChatWindowInfo(1);
     
+    if not spec.icon then return false end
+    
     local specIcon = '|T'..spec.icon..':'..fontSize..'|t'
     local specName = '|cFF'..specColor..spec.name..'|r'
     
@@ -179,6 +181,7 @@ end
 
 function TTS:TooltipAppendName(roleIcon, specIcon)
     local currentText = _G["GameTooltipTextLeft1"]:GetText()
+    if not currentText then return false end
     
     local appendText = ''
     
