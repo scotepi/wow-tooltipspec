@@ -1,0 +1,11 @@
+## Interface: 50200
+
+## Title: Tooltip Spec
+## Notes: Shows the spec of people around you in the tooltip.
+
+## Author: Scotepi
+## Version: @project-version@
+## OptionalDeps: LibInspect, SimpleILevel
+
+embeds.xml
+TooltipSpec.lua
