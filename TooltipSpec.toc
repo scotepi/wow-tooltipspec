@@ -1,4 +1,4 @@
-## Interface: 50100
+## Interface: 50200
 
 ## Title: Tooltip Spec
 ## Notes: Shows the spec of people around you in the tooltip.
