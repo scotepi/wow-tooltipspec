@@ -261,6 +261,9 @@ function TTS:SlashHandler(msg, editbox)
 	elseif cmd == "reset" then
 		self:Print("Resetting all settings");
 		self:ResetSettings();
+	elseif cmd == "debug" then
+		self:ToggleDebug();
+		self:Print("Debuging is now,", self:GetDebug());
 	else
 		self:Print('Syntax: /tts (role|spec|name|reset)');
 		self:Print('/tts role, Show the role next to the name,', self:GetNameRole());
