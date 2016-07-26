@@ -5,7 +5,7 @@
 
 ## Author: Scotepi
 ## Version: @project-version@
-## OptionalDeps: LibInspect, SimpleILevel
+## OptionalDeps: LibInspect
 
 embeds.xml
 TooltipSpec.lua
