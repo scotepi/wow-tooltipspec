@@ -6,6 +6,7 @@
 ## Author: Scotepi
 ## Version: @project-version@
 ## OptionalDeps: LibInspect
+## SavedVariables: TTS_Settings
 
 embeds.xml
 TooltipSpec.lua

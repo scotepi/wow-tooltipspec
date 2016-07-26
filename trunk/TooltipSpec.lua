@@ -7,12 +7,8 @@
 TTS = {}
 TTS.cache = {}
 TTS.events = {}
-TTS.frame = CreateFrame("Frame", "GMIFrame")
+TTS.frame = CreateFrame("Frame", "TTSFrame")
 TTS.inspect = LibStub:GetLibrary("LibInspect")
-TTS.nameRole = true;        -- Show the role next to the name
-TTS.nameSpec = true;        -- Show the spec next to the name
-TTS.showSpec = false;        -- Show the spec on the last line
-TTS.debug = false;
 
 function TTS:OnInitialize()
     self:Print('Tooltip Spec Loaded...')
@@ -24,6 +20,29 @@ function TTS:OnInitialize()
     -- Register more events
     self:RegisterEvent("PLAYER_TARGET_CHANGED", function() TTS:Inspect('target') end);
     self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", function() TTS:ShowTooltip(); end);
+	
+	-- SlashHandler
+	SLASH_TOOLTIPSPEC1 = '/tts';
+	SLASH_TOOLTIPSPEC2 = '/ttspec';
+	SLASH_TOOLTIPSPEC3 = '/tooltipspec';
+	function SlashCmdList.TOOLTIPSPEC(msg, editbox)
+		TTS:SlashHandler(msg, editbox);
+	end
+	
+	-- Initalize Settings
+	if not TTS_Settings then
+		self:ResetSettings();
+	end
+end
+
+function TTS:ResetSettings()
+	TTS_Settings = {
+		nameRole = true,
+		nameSpec = true,
+		showSpec = false,
+		debug = false,
+		settingVer = 1,
+	};
 end
 
 function TTS:Inspect(target)
@@ -210,15 +229,15 @@ end
 
 
 --[[ Setters / Getters / Togglers ]]
-function TTS:SetDebug(v) self.debug = v end
-function TTS:SetNameRole(v) self.nameRole = v end
-function TTS:SetNameSpec(v) self.nameSpec = v end
-function TTS:SetShowSpec(v) self.showSpec = v end
+function TTS:SetDebug(v) TTS_Settings.debug = v end
+function TTS:SetNameRole(v) TTS_Settings.nameRole = v end
+function TTS:SetNameSpec(v) TTS_Settings.nameSpec = v end
+function TTS:SetShowSpec(v) TTS_Settings.showSpec = v end
 
-function TTS:GetDebug() return self.debug end
-function TTS:GetNameRole() return self.nameRole end
-function TTS:GetNameSpec() return self.nameSpec end
-function TTS:GetShowSpec() return self.showSpec end
+function TTS:GetDebug() return TTS_Settings.debug end
+function TTS:GetNameRole() return TTS_Settings.nameRole end
+function TTS:GetNameSpec() return TTS_Settings.nameSpec end
+function TTS:GetShowSpec() return TTS_Settings.showSpec end
 
 function TTS:ToggleDebug() self:SetDebug(not self:GetDebug()) end
 function TTS:ToggleNameRole() self:SetNameRole(not self:GetNameRole()) end
@@ -226,8 +245,32 @@ function TTS:ToggleNameSpec() self:SetNameRole(not self:GetNameSpec()) end
 function TTS:ToggleShowSpec() self:SetShowSpec(not self:GetShowSpec()) end
 
 
-
-
+--[[ Handle the slash command ]]
+function TTS:SlashHandler(msg, editbox)
+	local cmd, rest = msg:match("^(%S*)%s*(.-)$");
+	
+	if cmd == "role" then
+		self:ToggleNameRole();
+		self:Print("Setting role next to the player name,", self:GetNameRole());
+	elseif cmd == "spec" then
+		self:ToggleNameSpec();
+		self:Print("Setting spec next to the player name,", self:GetNameSpec());
+	elseif cmd == "name" then
+		self:ToggleShowSpec();
+		self:Print("Showing the spec on the tooltip,", self:GetShowSpec());
+	elseif cmd == "reset" then
+		self:Print("Resetting all settings");
+		self:ResetSettings();
+	else
+		self:Print('Syntax: /tts (role|spec|name|reset)');
+		self:Print('/tts role, Show the role next to the name,', self:GetNameRole());
+		self:Print('/tts spec, Show the spec next to the name,', self:GetNameSpec());
+		self:Print('/tts name, Show the spec on the last line,', self:GetShowSpec());
+		self:Print('/tts reset, Reset settings to default');
+	end
+	self:Debug(cmd, rest);
+	
+end
 
 --[[ Ace3 Link functions ]]
 function TTS:RegisterEvent(event, callback)
