@@ -1,0 +1,11 @@
+package-as: TooltipSpec
+
+externals:
+    Libs/LibStub:
+        url: https://repos.wowace.com/wow/libstub/trunk
+        tag: latest
+    Libs/LibInspect:
+        url: https://repos.wowace.com/wow/libinspect/trunk
+        tag: latest
+    
+enable-nolib-creation: yes

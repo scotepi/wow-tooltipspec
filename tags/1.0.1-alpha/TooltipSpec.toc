@@ -1,0 +1,12 @@
+## Interface: 70200
+
+## Title: Tooltip Spec
+## Notes: Shows the spec of people around you in the tooltip.
+
+## Author: Scotepi
+## Version: @project-version@
+## OptionalDeps: LibInspect
+## SavedVariables: TTS_Settings
+
+embeds.xml
+TooltipSpec.lua
