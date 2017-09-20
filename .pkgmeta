@@ -5,7 +5,7 @@ externals:
         url: https://repos.wowace.com/wow/libstub/trunk
         tag: latest
     Libs/LibInspect:
-        url: https://repos.wowace.com/wow/libinspect/trunk
+        url: https://github.com/scotepi/wow-libinspect
         tag: latest
     
 enable-nolib-creation: yes
