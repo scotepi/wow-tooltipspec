@@ -1,4 +1,4 @@
-## Interface: 83000
+## Interface: 80300
 
 ## Title: Tooltip Spec
 ## Notes: Shows the spec of people around you in the tooltip.
