@@ -241,7 +241,7 @@ function TTS:GetShowSpec() return TTS_Settings.showSpec end
 
 function TTS:ToggleDebug() self:SetDebug(not self:GetDebug()) end
 function TTS:ToggleNameRole() self:SetNameRole(not self:GetNameRole()) end
-function TTS:ToggleNameSpec() self:SetNameRole(not self:GetNameSpec()) end
+function TTS:ToggleNameSpec() self:SetNameSpec(not self:GetNameSpec()) end
 function TTS:ToggleShowSpec() self:SetShowSpec(not self:GetShowSpec()) end
 
 
