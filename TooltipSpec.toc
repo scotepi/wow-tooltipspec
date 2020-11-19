@@ -1,4 +1,4 @@
-## Interface: 90001
+## Interface: 90002
 
 ## Title: Tooltip Spec
 ## Notes: Shows the spec of people around you in the tooltip.
